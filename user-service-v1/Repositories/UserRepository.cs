@@ -29,7 +29,7 @@ select currval('users.user_id_seq')";
 
                 try
                 {
-                    return await _connection.QuerySingleAsync<int>(sql, new { user });
+                    return await _connection.ExecuteScalarAsync<int>(sql, user);
                 }
                 catch (Exception)
                 {
@@ -92,7 +92,7 @@ select currval('users.user_id_seq')";
 
                 try
                 {
-                    await _connection.ExecuteAsync(sql, new { user });
+                    await _connection.ExecuteAsync(sql, user);
                 }
                 catch (Exception)
                 {
