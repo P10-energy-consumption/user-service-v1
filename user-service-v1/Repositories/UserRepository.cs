@@ -56,7 +56,8 @@ select currval('users.user_id_seq')";
 
                 try
                 {
-                    return await _connection.QuerySingleAsync<User>(sql, new { username });
+                    var result = await _connection.QueryAsync<User>(sql, new { username });
+                    return result.FirstOrDefault();
                 }
                 catch (Exception)
                 {
