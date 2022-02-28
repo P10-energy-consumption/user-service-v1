@@ -1,0 +1,138 @@
+﻿using Dapper;
+using System.Linq;
+using user_service_v1.Database.Interfaces;
+using user_service_v1.Models;
+using user_service_v1.Repositories.Interfaces;
+
+namespace user_service_v1.Repositories
+{
+    public class UserRepository : IUserRepository
+    {
+        private readonly IConnectionFactory _connectionFactory;
+
+        public UserRepository(IConnectionFactory connectionFactory)
+        {
+            _connectionFactory = connectionFactory;
+        }
+
+        public async Task<int> InsertUser(User user)
+        {
+            var sql = @" /* PetStore.User.Api */
+insert into users.user (username, firstname, lastname, email, passwordhash, salt, phone, status, created, createdby) 
+values (@username, @firstname, @lastname, @email, @passwordhash, @salt, @phone, @status, current_timestamp, 'PetStore.User.Api');
+
+select currval('users.user_id_seq')";
+
+            using (var _connection = _connectionFactory.CreateDBConnection())
+            {
+                await _connection.OpenAsync();
+
+                try
+                {
+                    return await _connection.QuerySingleAsync<int>(sql, new { user });
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    _connection.Close();
+                }
+            }
+        }
+
+        public async Task<User> GetUser(string username)
+        {
+            var sql = @"select u.id, u.username, u.status, u.firstname, u.lastname, u.email, u.phone, u.PasswordHash, u.salt
+                        from users.user u
+                        where u.IsDelete = false
+                        and u.UserName = @UserName";
+
+            using (var _connection = _connectionFactory.CreateDBConnection())
+            {
+                await _connection.OpenAsync();
+
+                try
+                {
+                    return await _connection.QuerySingleAsync<User>(sql, new { username });
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    _connection.Close();
+                }
+            }
+
+        }
+
+        public async Task UpdateUser(User user)
+        {
+            var sql = @"update users.user set
+                        FirstName = @FirstName,
+                        LastName = @LastName,
+                        Email = @Email,
+                        PasswordHash = @PasswordHash,
+                        Salt = @Salt,
+                        Phone = @Phone,                      
+                        Status = @Status,
+                        Modified = current_timestamp,
+                        ModifiedBy = 'PetStore.User.Api'
+                        where UserName = @UserName";
+
+
+            using (var _connection = _connectionFactory.CreateDBConnection())
+            {
+                await _connection.OpenAsync();
+
+                try
+                {
+                    await _connection.ExecuteAsync(sql, new { user });
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    _connection.Close();
+                }
+            }
+        }
+
+        public async Task DeleteUser(string username)
+        {
+            var sql = @"update users.user set
+                            Deleted = current_timestamp,
+                            DeletedBy = 'PetStore.User.Api',
+                            IsDelete = true
+                        where username = @username";
+
+
+            using (var _connection = _connectionFactory.CreateDBConnection())
+            {
+                await _connection.OpenAsync();
+
+                try
+                {
+                    await _connection.ExecuteAsync(sql, new { username });
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    _connection.Close();
+                }
+            }
+        }
+    }
+}
