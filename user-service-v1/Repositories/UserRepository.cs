@@ -18,8 +18,7 @@ namespace user_service_v1.Repositories
         public async Task<int> InsertUser(User user)
         {
             var result = -1;
-            var sql = @" /* PetStore.User.Api */
-insert into users.user (id, username, firstname, lastname, email, passwordhash, salt, phone, status, created, createdby) 
+            var sql = @"insert into users (id, username, firstname, lastname, email, passwordhash, salt, phone, status, created, createdby) 
 values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @phone, @status, current_timestamp, 'PetStore.User.Api');";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
@@ -49,9 +48,8 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
         {
             var result = new User();
             var sql = @"select u.id, u.username, u.status, u.firstname, u.lastname, u.email, u.phone, u.PasswordHash, u.salt
-                        from users.user u
-                        where u.IsDelete = false
-                        and u.UserName = @UserName";
+                        from users u
+                        where u.UserName = @UserName";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
@@ -78,7 +76,7 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
 
         public async Task UpdateUser(User user)
         {
-            var sql = @"update users.user set
+            var sql = @"update users set
                         FirstName = @FirstName,
                         LastName = @LastName,
                         Email = @Email,
@@ -113,7 +111,7 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
 
         public async Task DeleteUser(string username)
         {
-            var sql = @"delete from where username = @username";
+            var sql = @"delete from users where username = @username";
 
 
             using (var _connection = _connectionFactory.CreateDBConnection())
