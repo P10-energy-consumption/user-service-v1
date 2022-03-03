@@ -17,11 +17,10 @@ namespace user_service_v1.Repositories
 
         public async Task<int> InsertUser(User user)
         {
+            var result = -1;
             var sql = @" /* PetStore.User.Api */
-insert into users.user (username, firstname, lastname, email, passwordhash, salt, phone, status, created, createdby) 
-values (@username, @firstname, @lastname, @email, @passwordhash, @salt, @phone, @status, current_timestamp, 'PetStore.User.Api');
-
-select currval('users.user_id_seq')";
+insert into users.user (id, username, firstname, lastname, email, passwordhash, salt, phone, status, created, createdby) 
+values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @phone, @status, current_timestamp, 'PetStore.User.Api');";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
@@ -29,7 +28,7 @@ select currval('users.user_id_seq')";
 
                 try
                 {
-                    return await _connection.ExecuteScalarAsync<int>(sql, user);
+                    result = await _connection.ExecuteAsync(sql, user);
                 }
                 catch (Exception)
                 {
@@ -38,13 +37,17 @@ select currval('users.user_id_seq')";
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
+
+                return user.Id;
             }
         }
 
         public async Task<User> GetUser(string username)
         {
+            var result = new User();
             var sql = @"select u.id, u.username, u.status, u.firstname, u.lastname, u.email, u.phone, u.PasswordHash, u.salt
                         from users.user u
                         where u.IsDelete = false
@@ -56,8 +59,7 @@ select currval('users.user_id_seq')";
 
                 try
                 {
-                    var result = await _connection.QueryAsync<User>(sql, new { username });
-                    return result.FirstOrDefault();
+                    result = await _connection.QuerySingleAsync<User>(sql, new { username });
                 }
                 catch (Exception)
                 {
@@ -66,8 +68,10 @@ select currval('users.user_id_seq')";
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
                 }
+
+                return result;
             }
 
         }
@@ -102,18 +106,14 @@ select currval('users.user_id_seq')";
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
                 }
             }
         }
 
         public async Task DeleteUser(string username)
         {
-            var sql = @"update users.user set
-                            Deleted = current_timestamp,
-                            DeletedBy = 'PetStore.User.Api',
-                            IsDelete = true
-                        where username = @username";
+            var sql = @"delete from where username = @username";
 
 
             using (var _connection = _connectionFactory.CreateDBConnection())
@@ -131,7 +131,8 @@ select currval('users.user_id_seq')";
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
             }
         }

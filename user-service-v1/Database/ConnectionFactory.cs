@@ -8,6 +8,7 @@ namespace user_service_v1.Database
     {
         private readonly IConfiguration _configuration;
         private readonly Lazy<string> _connectionString;
+        private NpgsqlConnection _connection = null;
 
         public ConnectionFactory(IConfiguration configuration)
         {
@@ -17,8 +18,11 @@ namespace user_service_v1.Database
 
         public NpgsqlConnection CreateDBConnection()
         {
-            var connection = new NpgsqlConnection(_connectionString.Value);
-            return connection;
+            if (_connection == null)
+            {
+                return new NpgsqlConnection(_connectionString.Value);
+            }
+            return _connection;
         }
     }
 }

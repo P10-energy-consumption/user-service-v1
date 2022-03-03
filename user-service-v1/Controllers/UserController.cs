@@ -26,7 +26,8 @@ namespace user_service_v1.Controllers
         public async Task<IActionResult> UpdateUser([FromBody] User user)
         {
             await _userRepository.UpdateUser(user);
-            return Ok(user);
+            var result = await _userRepository.GetUser(user.UserName);
+            return Ok(result);
         }
 
         [HttpDelete("/v1/user/{username}")]
