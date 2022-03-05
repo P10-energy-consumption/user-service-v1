@@ -1,5 +1,5 @@
 ﻿create table pets(
-    Id INT,
+    ID int NOT NULL PRIMARY KEY,
     Name varchar(200) not null,
     Category int not null,
     Status int not null,
@@ -14,7 +14,7 @@
 );
 
 create table photos(
-    Id UNIQUEIDENTIFIER,
+    ID UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
     PetId int not null,
     Url varchar(200) not null,
     MetaData varchar(200) not null,
@@ -28,7 +28,7 @@ create table photos(
 );
 
 create table orders(
-    Id INT,
+    ID int NOT NULL PRIMARY KEY,
     PetId int not null,
     Quantity int not null,
     ShipDate DATETIME not null,
@@ -44,7 +44,7 @@ create table orders(
 );
 
 create table users(
-   Id int,
+   ID int NOT NULL PRIMARY KEY,
    UserName varchar(200),
    FirstName varchar(200),
    LastName varchar(200),
