@@ -37,7 +37,8 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return user.Id;
@@ -54,7 +55,7 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -67,7 +68,8 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return result;
@@ -92,7 +94,7 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -105,7 +107,8 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
             }
         }
@@ -113,12 +116,12 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
         public async Task DeleteUser(string username)
         {
             var sql = @" /* PetStore.User.Api */
-delete from users.user where id = @Id"; ;
+delete from users.user where id = @Id";
 
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -131,7 +134,8 @@ delete from users.user where id = @Id"; ;
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
             }
         }
