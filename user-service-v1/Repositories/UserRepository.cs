@@ -79,17 +79,18 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
 
         public async Task UpdateUser(User user)
         {
-            var sql = @"update users.user set
-                        FirstName = @FirstName,
-                        LastName = @LastName,
-                        Email = @Email,
-                        PasswordHash = @PasswordHash,
-                        Salt = @Salt,
-                        Phone = @Phone,                      
-                        Status = @Status,
-                        Modified = current_timestamp,
-                        ModifiedBy = 'PetStore.User.Api'
-                        where UserName = @UserName";
+            var sql = @" /* PetStore.User.Api */
+update users.user set
+FirstName = @FirstName,
+LastName = @LastName,
+Email = @Email,
+PasswordHash = @PasswordHash,
+Salt = @Salt,
+Phone = @Phone,                      
+Status = @Status,
+Modified = current_timestamp,
+ModifiedBy = 'PetStore.User.Api'
+where UserName = @UserName";
 
 
             using (var _connection = _connectionFactory.CreateDBConnection())
