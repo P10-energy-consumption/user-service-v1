@@ -24,7 +24,7 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
