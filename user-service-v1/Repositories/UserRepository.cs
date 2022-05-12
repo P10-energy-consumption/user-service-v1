@@ -24,7 +24,7 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
@@ -37,8 +37,7 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
                 }
                 finally
                 {
-                    await _connection.CloseAsync();
-                    await _connection.DisposeAsync();
+                    _connection.Close();
                 }
 
                 return user.Id;
@@ -55,7 +54,7 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
@@ -68,7 +67,7 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
                 }
                 finally
                 {
-                    await _connection.CloseAsync();
+                    _connection.Close();
                 }
 
                 return result;
@@ -93,7 +92,7 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
@@ -106,7 +105,7 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
                 }
                 finally
                 {
-                    await _connection.CloseAsync();
+                    _connection.Close();
                 }
             }
         }
@@ -119,7 +118,7 @@ delete from users.user where id = @Id"; ;
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
@@ -132,8 +131,7 @@ delete from users.user where id = @Id"; ;
                 }
                 finally
                 {
-                    await _connection.CloseAsync();
-                    await _connection.DisposeAsync();
+                    _connection.Close();
                 }
             }
         }
