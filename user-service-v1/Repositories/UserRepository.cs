@@ -113,7 +113,8 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
 
         public async Task DeleteUser(string username)
         {
-            var sql = @"delete from where username = @username";
+            var sql = @" /* PetStore.User.Api */
+delete from users.user where id = @Id"; ;
 
 
             using (var _connection = _connectionFactory.CreateDBConnection())
