@@ -48,10 +48,11 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
         public async Task<User> GetUser(string username)
         {
             var result = new User();
-            var sql = @"select u.id, u.username, u.status, u.firstname, u.lastname, u.email, u.phone, u.PasswordHash, u.salt
-                        from users.user u
-                        where u.IsDelete = false
-                        and u.UserName = @UserName";
+            var sql = @" /* PetStore.Store.Api */
+select u.id, u.username, u.status, u.firstname, u.lastname, u.email, u.phone, u.PasswordHash, u.salt
+from users.user u
+where u.IsDelete = false
+and u.UserName = @UserName";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
@@ -71,10 +72,8 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
                     await _connection.CloseAsync();
                     await _connection.DisposeAsync();
                 }
-
                 return result;
             }
-
         }
 
         public async Task UpdateUser(User user)
